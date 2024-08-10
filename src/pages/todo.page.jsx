@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getTodo } from "../utils/api";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { IconCheck, IconX } from "@tabler/icons-react";
 
 function TodoPage() {
   const [page, setPage] = useState(1);
@@ -34,14 +35,21 @@ function TodoPage() {
   console.log(data.data);
   return (
     <div>
-        <h4><Link to={'/'}>todo</Link></h4>
-        <p> Press above to go next page</p>
+      <h4>
+        <Link to={"/todo"}>todo</Link>
+      </h4>
       <Select
         label="per page"
         placeholder="10"
         value={limit}
         onChange={setLimit}
-        data={[{value: '10'}, {value: '20'}, {value: '30'}, {value: '40'}, {value: '50'}]}
+        data={[
+          { value: "10" },
+          { value: "20" },
+          { value: "30" },
+          { value: "40" },
+          { value: "50" },
+        ]}
         clearable
       />
       <Table striped withTableBorder withColumnBorders>
@@ -49,7 +57,7 @@ function TodoPage() {
           <Table.Tr>
             <Table.Th>ID</Table.Th>
             <Table.Th>Title</Table.Th>
-            <Table.Th>Completed</Table.Th>
+            <Table.Th>Action</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
@@ -58,7 +66,9 @@ function TodoPage() {
               <Table.Tr key={value.id}>
                 <Table.Td>{value.id}</Table.Td>
                 <Table.Td>{value.title}</Table.Td>
-                <Table.Td>{JSON.stringify(value.completed)}</Table.Td>
+                <Table.Td>
+                  <Link to={`/post/${value.id}`}>More</Link>{" "}
+                </Table.Td>
               </Table.Tr>
             );
           })}
@@ -68,7 +78,7 @@ function TodoPage() {
         <Pagination
           value={page}
           onChange={setPage}
-          total={200 / limit}
+          total={100 / limit}
           mt={"lg"}
         />
       </Center>
