@@ -35,6 +35,7 @@ function TodoPage() {
   return (
     <div>
         <h4><Link to={'/'}>todo</Link></h4>
+        <p> Press above to go next page</p>
       <Select
         label="per page"
         placeholder="10"
