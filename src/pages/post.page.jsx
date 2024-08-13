@@ -6,21 +6,31 @@ import {
   Pagination,
   Select,
   Table,
+  Text,
 } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { getTodo } from "../utils/api";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { IconCheck, IconX } from "@tabler/icons-react";
+import { Link, useSearchParams } from "react-router-dom";
 
-function TodoPage() {
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+function PostPage() {
+  let [searchParams, setSearchParams] = useSearchParams();
+  console.log();
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["fetch-todo", page, limit],
-    queryFn: () => getTodo(page, limit),
+    queryKey: [
+      "fetch-todo",
+      searchParams.get("page") || 1,
+      searchParams.get("limit") || 10,
+    ],
+    queryFn: () =>
+      getTodo(searchParams.get("page") || 1, searchParams.get("limit") || 10),
   });
+
+  const updateQueryParams = (newParams) => {
+    const mergedParams = { ...Object.fromEntries(searchParams), ...newParams };
+    setSearchParams(mergedParams);
+  };
+
   if (isLoading) {
     return <LoadingOverlay visible />;
   }
@@ -32,17 +42,17 @@ function TodoPage() {
       </Card>
     );
   }
-  console.log(data.data);
+
   return (
     <div>
       <h4>
-        <Link to={"/todo"}>todo</Link>
+        <Text variant="gradient" size="xl">Posts</Text>
       </h4>
       <Select
         label="per page"
         placeholder="10"
-        value={limit}
-        onChange={setLimit}
+        value={searchParams.get("limit") || 10}
+        onChange={(value) => updateQueryParams({ limit : value })}
         data={[
           { value: "10" },
           { value: "20" },
@@ -67,23 +77,22 @@ function TodoPage() {
                 <Table.Td>{value.id}</Table.Td>
                 <Table.Td>{value.title}</Table.Td>
                 <Table.Td>
-                  <Link to={`/post/${value.id}`}>More</Link>{" "}
+                  <Link to={`/post/${value.id}`}>More</Link>
                 </Table.Td>
               </Table.Tr>
             );
           })}
         </Table.Tbody>
       </Table>
-      <Center>
+      <Center mt={"lg"}>
         <Pagination
-          value={page}
-          onChange={setPage}
-          total={100 / limit}
-          mt={"lg"}
+          onChange={(value) => updateQueryParams({ page : value })}
+          value={+searchParams.get("page") || 1}
+          total={100 / (+searchParams.get("limit") || 10)}
         />
       </Center>
     </div>
   );
 }
 
-export default TodoPage;
+export default PostPage;

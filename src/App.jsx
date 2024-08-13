@@ -1,7 +1,7 @@
 import "@mantine/core/styles.css";
 import { Container } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import TodoPage from "./pages/todo.page";
+import PostPage from "./pages/post.page";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { PostDetail } from "./pages/posts/details.page"
 
@@ -10,14 +10,14 @@ const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <TodoPage />,
+    element: <PostPage />,
   },
   {
     path: "todo",
     element: <div>Hello world!</div>,
   },
   {
-    path: "post/:post_id",
+    path: "post/:id",
     element: <PostDetail />,
   },
 ]);
