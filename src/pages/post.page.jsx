@@ -13,7 +13,7 @@ import { getTodo } from "../utils/api";
 import { Link, useSearchParams } from "react-router-dom";
 
 function PostPage() {
-  let [searchParams, setSearchParams] = useSearchParams();
+              let [searchParams, setSearchParams] = useSearchParams();
   console.log();
 
   const { data, isLoading, isError } = useQuery({
